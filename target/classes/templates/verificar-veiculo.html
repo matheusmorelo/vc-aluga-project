@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Voce Aluga - Consultar Cliente</title>
+</head>
+<body>
+<header th:insert="~{fragments/header :: header}"></header>
+
+<div class="container">
+    <div class="d-flex justify-content-center mb-3">
+        <form th:action="@{/veiculo/verificar}" method="GET" th:object="${veiculoDto}">
+            <h1>Consultar veiculo</h1>
+            <p class="alert alert-danger mt-2 w-100" th:if="${param.error}">Infelizmente não encontramos o veículo</p>
+
+            <div class="form-group">
+                <label for="placa">Pesquisar pela placa</label>
+                <input th:field="*{placa}" class="form-control w-100" th:name="placa"  type="text" id="placa" name="placa" placeholder="Digite a placa do veículo">
+            </div>
+
+            <div class="form-group">
+                <label for="situacao">Pesquisar pela situação:</label>
+                <input th:field="*{status}" class="form-control w-100" th:name="situacao" type="text" id="situacao" name="situacao" placeholder="Digite a situação">
+            </div>
+
+            <div class="form-group mt-3">
+                <label for="selectCar">Busque por todos nossos modelos pelo seletor</label>
+                <select th:field="*{id}" class="form-control" id="selectCar" name="selectCar">
+                    <option selected value="">Selecione um veículo</option>
+                    <option th:each="veiculo : ${veiculos}" th:value="${veiculo.getId()}" th:text="${veiculo.getModelo()} + ' - ' + ${veiculo.getPlaca()}"></option>
+                </select>
+            </div>
+
+            <button class="btn btn-primary mt-3 w-100" type="submit">Consultar</button>
+        </form>
+    </div>
+
+    <table class="table" th:if="${veiculo != null}">
+        <thead>
+        <tr>
+            <th scope="col">Modelo</th>
+            <th scope="col">Cor</th>
+            <th scope="col">Placa</th>
+            <th scope="col">Situacao</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${veiculo.getModelo()}"></td>
+            <td th:text="${veiculo.getCor()}"></td>
+            <td th:text="${veiculo.getPlaca()}"></td>
+            <td th:text="${veiculo.getStatus()}"></td>
+            <td>
+                <a th:href="@{/atualizar/veiculo/{id}(id=${veiculo.getId()})}" class="btn btn-primary">Alterar</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table" th:if="${veiculo == null}">
+        <thead>
+        <tr>
+            <th scope="col">Modelo</th>
+            <th scope="col">Cor</th>
+            <th scope="col">Placa</th>
+            <th scope="col">Situacao</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="veiculo : ${veiculos}">
+            <td th:text="${veiculo.getModelo()}"></td>
+            <td th:text="${veiculo.getCor()}"></td>
+            <td th:text="${veiculo.getPlaca()}"></td>
+            <td th:text="${veiculo.getStatus()}"></td>
+            <td>
+                <a th:href="@{/veiculo/atualizar/{id}(id=${veiculo.getId()})}" class="btn btn-primary">Alterar</a>
+                <a th:if="${veiculo.getStatus() == 'reservado'}" th:href="@{/veiculo/devolver/{id}(id=${veiculo.getId()})}" class="btn btn-danger">Devolver</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<th:block th:insert="~{fragments/general :: jquery-plugin}"></th:block>
+<th:block th:insert="~{fragments/general :: js-bootstrap}"></th:block>
+
+</body>
+</html>

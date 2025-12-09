@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Voce Aluga - Registrar</title>
+
+    <style>
+        body {
+            margin: 0 auto;
+            place-items: center;
+            display: flex;
+        }
+
+        #client-select, #funcionario-select, .cnpj-form-div, .cpf-form-div {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Voce Aluga - Cadastro</h1>
+                </div>
+
+                <div class="card-body">
+                    <div style="display: none" id="error-message" class="alert alert-danger mt-2"></div>
+                    <div th:if="${param.error}" class="alert alert-danger mt-2">Ocorreu um erro ao cadastrar o cliente.</div>
+                    <div th:if="${param.success}" class="alert alert-info mt-2">Cadastro concluído.</div>
+
+
+                    <form role="form" th:action="@{/cadastrar}" method='POST' th:object="${cliente}" onsubmit="return handleSubmitRequest();">
+                        <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input
+                                    required
+                                    id="nome"
+                                    class="form-control"
+                                    type='text'
+                                    name='nome'
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="select-user-type">Tipo de usuário</label>
+                            <select th:field="*{permissaoId}" id="select-user-type" class="form-select mt-2 mb-2" aria-label="Default select example">
+                                <option value="0">Selecione o tipo de usuário</option>
+                                <option th:each="permissao : ${permissoes}" th:value="${permissao.id}" th:text="${permissao.nome}" />
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select th:field="*{clienteType}" onchange="handleSelectedClientType()" id="client-select" class="form-select" aria-label="Default select example">
+                                <option value="0" selected>Selecione o tipo de cliente</option>
+                                <option value="1">Pessoa Física</option>
+                                <option value="2">Pessoa Jurídica</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <select id="funcionario-select" class="form-select" aria-label="Default select example">
+                                <option value="0">Selecione o tipo de funcionário</option>
+                                <option value="1">Mecanico</option>
+                                <option value="2">Gerente</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group cpf-form-div">
+                            <label for="cpf" class="col-sm-4 cpf-form-div">CPF</label>
+                            <input
+                                    id="cpf"
+                                    class="form-control cpf-form-div"
+                                    type='text'
+                                    name='cpf'
+                                    th:field="*{cpf}"
+                            />
+                            <p th:errors="*{cpf}" class="text-danger"
+                               th:if="${#fields.hasErrors('cpf')}">
+                            </p>
+                        </div>
+
+                        <div class="form-group cnpj-form-div" >
+                            <label  for="cnpj" class="col-sm-4 cnpj-form-div">CNPJ</label>
+                            <input
+                                    id="cnpj"
+                                    class="form-control cnpj-form-div"
+                                    type='text'
+                                    name='cnpj'
+                                    th:field="*{cnpj}"
+                            />
+                            <p th:errors="*{cnpj}" class="text-danger"
+                               th:if="${#fields.hasErrors('cnpj')}">
+                            </p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="contato" class="col-sm-4">Telefone</label>
+                            <input
+                                    required
+                                    id="contato"
+                                    class="form-control"
+                                    type='text'
+                                    name='telefone'
+                                    th:field="*{contato}"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="idade">Idade</label>
+                            <input
+                                    required
+                                    id="idade"
+                                    class="form-control"
+                                    type='number'
+                                    name='idade'
+                                    th:field="*{idade}"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="senha" class="col-sm-4">Senha</label>
+                            <input
+                                    required
+                                    id="senha"
+                                    class="form-control"
+                                    type='password'
+                                    name='senha'
+                                    th:field="*{senha}"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <button id="register-button" class="btn btn-primary mt-3" name="submit" type="submit">Cadastrar</button>
+                            <button class="btn btn-black"><a th:href="@{/login}">Já tem uma conta?</a></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:insert="~{fragments/general :: jquery-plugin}"></th:block>
+    <th:block th:insert="~{fragments/general :: js-bootstrap}"></th:block>
+
+    <script th:inline="javascript">
+        $(document).ready(function() {
+            $("#select-user-type").on("change", handleSelectedUserType);
+        });
+
+        function handleSelectedUserType() {
+            const selectedUserType = $("#select-user-type").val();
+
+            if ($("#error-message").is(":visible")) {
+                $("#error-message").hide();
+            }
+
+            switch (selectedUserType) {
+                case "1":
+                case "2":
+                    $("#client-select").show();
+                    break;
+
+                case "3":
+                    $("#funcionario-select").show();
+                    break;
+
+                default:
+                    if ($("#client-select").is(":visible")) {
+                        $("#client-select").hide();
+                    }
+
+                    if ($("#funcionario-select").is(":visible")) {
+                        $("#funcionario-select").hide();
+                    }
+
+                    $("#error-message").text("Selecione uma opção válida").show();
+            }
+        }
+
+        function handleSelectedClientType() {
+            const selectedClientType = $("#client-select").val();
+
+            if ($(".cpf-form-div").is(":visible")) {
+                $(".cpf-form-div").hide();
+            }
+
+            if ($(".cnpj-form-div").is(":visible")) {
+                $(".cnpj-form-div").hide();
+            }
+
+            if ($("#error-message").is(":visible")) {
+                $("#error-message").hide();
+            }
+
+            switch (selectedClientType) {
+                case "1":
+                    $(".cpf-form-div").show();
+                    break;
+
+                case "2":
+                    $(".cnpj-form-div").show();
+                    break;
+
+                default:
+                    $("#error-message").text("Selecione uma opção válida").show();
+            }
+        }
+
+        function handleSubmitRequest() {
+            let idade = $("#idade").val();
+
+            if (idade < 18) {
+                $("#error-message").text("Idade inválida, por favor, cadastre uma pessoa maior de 18 anos").show();
+                $("#idade").val("").focus();
+                return false;
+            }
+
+            const selectedUserType = $("#select-user-type").val();
+
+            if (selectedUserType === "0") {
+                $("#error-message").text("Selecione uma opção válida").show();
+                return false;
+            }
+
+            if (selectedUserType === "1" || selectedUserType === "2") {
+                const selectedClientType = $("#client-select").val();
+
+                if (selectedClientType === "0") {
+                    $("#error-message").text("Selecione uma opção válida").show();
+                    return false;
+                }
+
+                switch (selectedClientType) {
+                    case "1":
+                        const cpf = $("#cpf").val();
+
+                        if (cpf.length !== 11) {
+                            $("#error-message").text("CPF inválido").show();
+                            $("#cpf").val("").focus();
+                            return false;
+                        }
+                        break;
+
+                    case "2":
+                        const cnpj = $("#cnpj").val();
+
+                        if (cnpj.length !== 14) {
+                            $("#error-message").text("CNPJ inválido").show();
+                            $("#cnpj").val("").focus();
+                            return false;
+                        }
+                        break;
+
+                    default:
+                        $("#error-message").text("Selecione uma opção válida").show();
+                        return false;
+                }
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>

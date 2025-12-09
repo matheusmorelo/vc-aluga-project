@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Transação</title>
+    <style>
+        body {
+            background-color: #f0f0f0; /* Cinza claro */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        form {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff; /* Cor de fundo do formulário */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333; /* Cor do texto do cabeçalho */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333; /* Cor do texto dos rótulos */
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #333; /* Cor de fundo do botão */
+            color: #fff; /* Cor do texto do botão */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" th:action="@{/pagar}" th:object="${transaction}">
+        <h1>Transação</h1>
+        <div th:if="${param.success}" class="alert alert-info mt-2">Transação concluída.</div>
+
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="forma">Forma:</label>
+        <select th:field="*{forma}" id="forma" name="forma" required>
+            <option value="debito">Débito</option>
+            <option value="credito">Crédito</option>
+            <option value="pix">Pix</option>
+            <option value="dinheiro">Dinheiro</option>
+        </select>
+
+        <label for="data">Data de pagamento:</label>
+        <input type="date" id="data" name="data" required>
+
+        <label for="documento">Documento do cliente:</label>
+        <input th:field="*{idCliente}" type="text" id="documento" name="documento" required>
+
+        <label for="descricao">Descrição:</label>
+        <textarea th:field="*{descricao}" id="descricao" name="descricao" rows="4" required></textarea>
+
+        <button type="submit">Registrar Transação</button>
+        <a href="/home" class="btn btn-info">Voltar para home</a>
+
+        <div th:if="${param.success}" class="block mt-3">
+            <a href="/getNota" class="btn btn-secondary w-100">Gerar nota</a>
+        </div>
+    </form>
+</body>
+</html>

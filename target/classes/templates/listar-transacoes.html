@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Voce Aluga - Transacoes</title>
+</head>
+<body>
+<header th:insert="~{fragments/header :: header}"></header>
+
+<div class="container">
+    <div class="d-flex justify-content-center mb-3">
+        <h1 class="text-center">Listagem de Transações</h1>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Forma</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Documento</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="transaction : ${transactions}">
+            <td th:text="${transaction.getIdTransacao()}"></td>
+            <td th:text="${transaction.getForma()}"></td>
+            <td th:text="${transaction.getDescricao()}"></td>
+            <th:block th:if="${transaction.getCliente().cpf.isEmpty() == false}">
+                <td th:text="${transaction.getCliente().cpf}"></td>
+            </th:block>
+            <th:block th:if="${transaction.getCliente().cnpj.isEmpty() == false}">
+                <td th:text="${transaction.getCliente().cnpj}"></td>
+            </th:block>
+            <td>
+                <form th:action="@{/transacao/deletar}" method="POST">
+                    <input type="hidden" th:name="id" th:value="${transaction.getIdTransacao()}">
+                    <button class="btn btn-danger" type="submit">Deletar</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Devolução</title>
+    <style>
+        body {
+            background-color: #f0f0f0; /* Cinza claro */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        form {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff; /* Cor de fundo do formulário */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333; /* Cor do texto do cabeçalho */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333; /* Cor do texto dos rótulos */
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #333; /* Cor de fundo do botão */
+            color: #fff; /* Cor do texto do botão */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form th:object="${devolucaoDto}" method="post" th:action="@{/devolver/veiculo}" onsubmit="return handleDevolucaoSubmit()">
+        <h1>Devolução</h1>
+        <div th:if="${param.success}" class="alert alert-info mt-2">Devolução concluída.</div>
+
+        <label for="cobranca">Cobrança:</label>
+        <input th:field="*{cobranca}" type="text" id="cobranca" name="cobranca" required>
+
+        <label for="cnh">CNH motorista:</label>
+        <input th:field="*{cnh}" type="text" id="cnh" name="cnh" required>
+
+        <label for="descricao">Descrição:</label>
+        <textarea th:field="*{descricao}" id="descricao" name="descricao" rows="4" required></textarea>
+
+        <label for="idVeiculo">Veiculo: </label>
+        <input id="idVeiculo" readonly th:field="*{idVeiculo}" th:placeholder="${veiculo.id}">
+
+        <label for="dataDevolucao">Data de Devolução:</label>
+        <input th:field="*{dataDevolucao}" type="date" id="dataDevolucao" name="dataDevolucao" required>
+
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+
+<script>
+    function handleDevolucaoSubmit() {
+        document.getElementById("idVeiculo").value = document.getElementById("idVeiculo").placeholder;
+        confirm("Deseja realmente devolver o veículo?");
+    }
+</script>
+</html>

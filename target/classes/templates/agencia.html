@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agência</title>
+    <style>
+        body {
+            background-color: #f0f0f0; /* Cinza claro */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        form {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff; /* Cor de fundo do formulário */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333; /* Cor do texto do cabeçalho */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333; /* Cor do texto dos rótulos */
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #333; /* Cor de fundo do botão */
+            color: #fff; /* Cor do texto do botão */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h3 th:if="${param.error}">Ocorreu um erro</h3>
+
+    <form th:action="@{/criarAgencia}" method="post" th:object="${agencia}">
+        <h1>Agência</h1>
+
+        <label for="contato">Contato:</label>
+        <input th:field="*{contato}" type="text" id="contato" name="contato" required>
+
+        <label for="relatorio">Relatório:</label>
+        <textarea th:field="*{relatorio}" id="relatorio" name="relatorio" rows="4" required></textarea>
+
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>

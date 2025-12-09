@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+    <th:block th:fragment="head">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    </th:block>
+    <title></title>
+
+    <body>
+        <nav th:fragment="header" class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Voce Aluga</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/catalogoVeiculos}">Catálogo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/cadastro}">Cadastrar Cliente</a>
+                        </li>
+                    </ul>
+
+                    <form th:action="@{/consultarCliente}" class="d-flex" role="search" method="GET">
+                        <input class="form-control me-2" id="document" name="document" type="search" placeholder="Procurar Cliente" aria-label="Search">
+                        <button class="btn btn-secondary" type="submit">Search</button>
+                    </form>
+
+                    <form class="d-flex" role="form" method="POST" th:action="@{/logout}">
+                        <button class="btn btn-primary" type="submit">Sair</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <th:block th:insert="~{fragments/general :: jquery-plugin}"></th:block>
+        <th:block th:insert="~{fragments/general :: js-bootstrap}"></th:block>
+    </body>
+</html>

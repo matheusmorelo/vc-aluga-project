@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Voce Aluga - Login</title>
+
+    <script th:inline="javascript">
+        function validate() {
+            if (document.f.username.value === "") {
+                alert('Por favor, digite seu documento');
+                document.f.username.focus();
+                return false;
+            }
+
+            if (document.f.password.value === "") {
+                alert('Por favor, digite sua senha');
+                document.f.password.focus();
+                return false;
+            }
+
+            if (document.f.username.value.length === 11) {
+                if (isNaN(document.f.username.value)) {
+                    alert('Por favor, digite um documento válido');
+                    document.f.username.focus();
+                    return false;
+                }
+                return true;
+            }
+
+            if (document.f.username.value.length === 14) {
+                if (isNaN(document.f.username.value)) {
+                    alert('Por favor, digite um documento válido');
+                    document.f.username.focus();
+                    return false;
+                }
+                return true;
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            background-color: #f5f5f5;
+        }
+
+        #client-select,
+        #username,
+        #password
+        {
+            width: 20rem;
+        }
+
+        .form-signin {
+            max-width: 500px;
+            padding: 1rem;
+        }
+
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .form-signin input[type="text"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+
+        .document-form-div {
+            display: none;
+        }
+    </style>
+</head>
+<body class="d-flex align-items-center py-4 bg-body-tertiary">
+            <div th:if="${message != null}" class="alert alert-info" th:utext="${message}"></div>
+
+            <form class="form-signin w-100 m-auto" name="f" th:action="@{/login}" method='POST' onsubmit="return validate();">
+                <img class="mb-4" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH0AAAB9CAMAAAC4XpwXAAAAYFBMVEX+/v4rKij///8AAADDw8IvLSv39velpaQYFRLv7+/n5+cjIiIzMzIUEA0nJiSrqqne3t45OTYeHRpmZmUaGRaZmZixsbF5eXfY2NiDg4KOjoxZWVhNTUsNCwXNzc1CQkERPDbDAAADI0lEQVRoge2ZbbOqIBCAZQ3FF8iQtHz9///yolnWOacCpGbuzD4fzsxpWh7dgF00CBAEQRAEQRAEQRAEQfwB7/mk+1TFr6hOn/IDpOcw7Blnz+CsD8Nz+gk/BI2S5D1SNYF3PUQlIyRjIn+FYBkhrIx866FVhPCuKtJXFFXHCVGtZzvEIRWsMpjzFRM0jL3qIdVyWpiMCUWu9alXfSkJr8xGhIoTWXp0Q9XbDKgvtTe8VBN5chBEGeV9/nqhiDgkvvRQM8KP5qPBkRNWe7LD0BORW+xgALkg/bBNf1tEOu/caiwYuM79psIDUXFB51Fa5hFqvUaOS7zLzgdFJ7MZqfNuuX4h1bm/hnfG8/VuALrWlNB6/UAVrnWHWtuhCOktvLSuWjAt+gUaWt+8tq+37pK6bfFw4OISzCyW+l38kV3CBT84XHzSjHIeIBwMSttvhvnmmRwbp21Pd3Gxmi6+3bnQTqlT8cm50Zqqy6QPXcim0A3VBlKTRu5Nm+da6SGo1Wa7qh17TCj6zXKde4flOtsb5sHOGjd7NF4WvBBO2iVMjJHTrZ/mOcdoO3JlewFC9WNL59zJk9Nyr6bgLE6iZDiPzGb6SzWeBx0XT6uOOS26eavslxY+2pXCMAH6e+UuWZr73nmjriUV3RKpR0r21EQv8n1y62egE9S2M7lFEnk/YSE1uvX77QUa3Zp0Tvbxhz2A8/sfX54fIib76NJZBbo5Eu3DR42B/XF5T6WGOux2EE2D6eMTrJ9073940a1NJEyHKo1DWwnJrFJxci3YSW2y97F6DZgLNBEO9X2xE84PC4ZLXrJrAOdkq53qLfOCkXvWXQPoBntmrHtN5t9OH/mmnf3RSD2fkZ7t6vhHC3t82gf5tusD7WUbuP7R/w/ftP/6+tfs7K/jxfD0h/dr13V3/xtdS79z70Qw/hP2fDP6wHq34H+359SO3KM9K4PIjqDMPNqtT++b7esslqX1g5f1sc3mCrvN7iHz1va7a3d5cgJdeH3ZFFofR+C4Bjv180F0e/e2c0jd7vaOzukMe//m8dvBCIIgCIIgCIIgCIIgF/4BMC037jdv6lAAAAAASUVORK5CYII=" alt="">
+                    <h1 class="h3 mb-3 fw-normal">Login</h1>
+                    <div th:if="${param.error}" class="alert alert-danger mt-2">Documento ou senha incorretos.</div>
+
+                    <div class="form-group mb-3">
+                        <select onchange="handleSelectedClientType()" id="client-select" class="form-select" aria-label="Default select example">
+                            <option value="0" selected>Selecione seu identificador unico</option>
+                            <option value="1">Pessoa Física</option>
+                            <option value="2">Pessoa Jurídica</option>
+                        </select>
+                    </div>
+
+                    <div class="form-floating document-form-div">
+                        <input
+                                id="username"
+                                name="username"
+                                class="form-control document-form-div"
+                                type='text'
+                                placeholder="Digite seu documento"
+                        />
+                        <label for="username" class="document-form-div">Documento</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input
+                                id="password"
+                                class="form-control"
+                                type='password'
+                                name='password'
+                                placeholder="Digite sua senha"
+                        />
+                        <label for="password">Senha</label>
+                    </div>
+
+                    <button class="btn btn-primary py-2" style="width: 69% !important;" name="submit" type="submit">Entrar</button>
+
+                    <div class="form-floating mt-3">
+                        <a style="margin-left: 10px" th:href="@{/cadastro}">Cadastrar</a>
+                    </div>
+            </form>
+
+<th:block th:insert="~{fragments/general :: jquery-plugin}"></th:block>
+<th:block th:insert="~{fragments/general :: js-bootstrap}"></th:block>
+
+<script th:inline="javascript">
+    function handleSelectedClientType() {
+        const selectedClientType = $("#client-select").val();
+
+        if ($(".document-form-div").is(":visible")) {
+            $(".document-form-div").hide();
+        }
+
+        if ($("#error-message").is(":visible")) {
+            $("#error-message").hide();
+        }
+
+        switch (selectedClientType) {
+            case "1":
+            case "2":
+                $(".document-form-div").show();
+                break;
+
+            default:
+                $("#error-message").text("Selecione uma opção válida").show();
+        }
+    }
+</script>
+</body>
+</html>

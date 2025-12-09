@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Reserva - Veiculo</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="text-center">Voce Aluga - Cadastro de reserva</h1>
+                    <p class="text-center">Você está reservando o veículo <th:block th:text="${veiculo.getModelo()}"></th:block></p>
+                </div>
+
+                <div class="card-body">
+                    <div style="display: none" id="error-message" class="alert alert-danger mt-2"></div>
+                    <div th:if="${param.error}" class="alert alert-danger mt-2">Ocorreu um erro ao cadastrar a reserva.</div>
+
+
+                    <form role="form" th:action="@{/reservar/veiculo/{id}(id=${veiculo.getId()})}" method='POST' th:object="${reserva}" onsubmit="return handleFormSubmit();">
+                        <div class="form-group">
+                            <label for="date-inicio">Data de Início</label>
+                            <input
+                                    th:field="*{dataInicio}"
+                                    required
+                                    id="date-inicio"
+                                    class="form-control"
+                                    type='date'
+                                    name='data-inicio'
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date-fim">Data de Fim</label>
+                            <input
+                                    th:field="*{dataFim}"
+                                    required
+                                    id="date-fim"
+                                    class="form-control"
+                                    type='date'
+                                    name='data-fim'
+                                    onchange="handleEndDateBehavior()"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cliente-document">Documento do cliente</label>
+                            <input
+                                    th:field="*{clienteDocument}"
+                                    required
+                                    id="cliente-document"
+                                    class="form-control"
+                                    type='text'
+                                    name='cliente-document'
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cnh-condutor">CNH Motorista</label>
+                            <input
+                                    th:field="*{cnhCondutor}"
+                                    required
+                                    id="cnh-condutor"
+                                    class="form-control"
+                                    type='text'
+                                    name='cnh-condutor'
+                            />
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="placa-veiculo">Placa Veículo</label>
+                            <input
+                                    th:field="*{placaVeiculo}"
+                                    th:placeholder="${veiculo.getPlaca()}"
+                                    readonly
+                                    id="placa-veiculo"
+                                    class="form-control"
+                                    name='placa-veiculo'
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="agencia">Agencia</label>
+                            <input
+                                    th:field="*{agenciaId}"
+                                    readonly
+                                    id="agencia"
+                                    class="form-control"
+                                    th:placeholder="${veiculo.agencia.id}"
+                                    name='agencia'
+                            />
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <button class="btn btn-primary" type="submit">Prosseguir para pagamento</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block th:insert="~{fragments/general :: jquery-plugin}"></th:block>
+    <th:block th:insert="~{fragments/general :: js-bootstrap}"></th:block>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            const now = new Date().toISOString().split('T')[0];
+            $("input[type=date]").attr('min', now);
+        })
+
+        function handleEndDateBehavior() {
+            let endDateValue = $("#date-fim").val();
+            let startDateValue = $("#date-inicio").val();
+
+            if (endDateValue < startDateValue) {
+                $("#date-fim").val("").focus();
+                alert("Por favor, preencha uma data de fim menor que a de início");
+            }
+        }
+
+        function handleFormSubmit() {
+            const dataInicio = document.getElementById('date-inicio').value;
+            const dataFim = document.getElementById('date-fim').value;
+            const clienteDocument = document.getElementById('cliente-document').value;
+            const cnhCondutor = document.getElementById('cnh-condutor').value;
+            const agencia = document.getElementById('agencia').placeholder;
+            document.getElementById("agencia").value = agencia;
+            const placaVeiculo = document.getElementById("placa-veiculo").placeholder;
+            document.getElementById("placa-veiculo").value = placaVeiculo;
+
+            if (!dataInicio || !dataFim || !clienteDocument || !cnhCondutor || !agencia || !placaVeiculo) {
+                document.getElementById('error-message').innerHTML = 'Todos os campos são obrigatórios';
+                document.getElementById('error-message').style.display = 'block';
+                return false;
+            }
+
+            alert("Você será direcionado para a página de pagamento");
+            return true;
+        }
+    </script>
+</body>
+</html>

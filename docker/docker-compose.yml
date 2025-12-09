@@ -1,0 +1,17 @@
+version: '3.9'
+
+services:
+    db:
+      image: mysql:latest
+      container_name: mysql
+      ports:
+        - "3306:3306"
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      environment:
+        MYSQL_DATABASE: voce_aluga
+        MYSQL_USER: app
+        MYSQL_PASSWORD: app@123
+        MYSQL_ROOT_PASSWORD: root
+      volumes:
+        - ./mysql:/var/lib/mysql

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Voce Aluga - Consultar Cliente</title>
+</head>
+<body>
+<header th:insert="~{fragments/header :: header}"></header>
+
+<div class="container">
+    <div class="d-flex justify-content-center mb-3">
+            <form th:action="@{consultarCliente}" th:object="${clienteDto}" method="GET">
+                <h1>Consultar Cliente</h1>
+                <p class="alert alert-danger mt-2 w-100" th:if="${param.error}">Não encontramos cliente para o doucmento informado</p>
+
+                <div class="form-group">
+                    <label for="documento">Documento</label>
+                    <input class="form-control w-100" th:field="*{document}" required type="text" id="documento" name="documento" placeholder="Digite o documento do cliente">
+                </div>
+
+                <button class="btn btn-primary mt-3 w-100" type="submit">Consultar</button>
+            </form>
+    </div>
+
+    <table class="table" th:if="${cliente != null}">
+            <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Telefone</th>
+                    <th scope="col">Idade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${cliente.getNome()}"></td>
+                    <td th:text="${cliente.getCpf()}"></td>
+                    <td th:text="${cliente.getContato()}"></td>
+                    <td th:text="${cliente.getIdade()}"></td>
+                </tr>
+            </tbody>
+    </table>
+
+    <table class="table" th:if="${cliente == null}">
+        <thead>
+        <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Documento</th>
+            <th scope="col">Telefone</th>
+            <th scope="col">Idade</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cliente : ${clientes}">
+            <td th:text="${cliente.getNome()}"></td>
+            <td th:text="${cliente.getCpf()}"></td>
+            <td th:text="${cliente.getContato()}"></td>
+            <td th:text="${cliente.getIdade()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Veículo</title>
+    <style>
+        body {
+            background-color: #f0f0f0; /* Cinza claro */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        form {
+            max-width: 400px;
+            width: 100%;
+            background-color: #fff; /* Cor de fundo do formulário */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+
+        h1 {
+            text-align: center;
+            color: #333; /* Cor do texto do cabeçalho */
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333; /* Cor do texto dos rótulos */
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #333; /* Cor de fundo do botão */
+            color: #fff; /* Cor do texto do botão */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" th:action="@{/cadastrarVeiculo}" th:object="${veiculo}">
+        <h1>Cadastro Veículo</h1>
+
+        <label for="placa">Placa:</label>
+        <input th:field="*{placa}" type="text" id="placa" name="placa" required>
+
+        <label for="modelo">Modelo:</label>
+        <input th:field="*{modelo}" type="text" id="modelo" name="modelo" required>
+
+        <label for="cor">Cor:</label>
+        <input th:field="*{cor}" type="text" id="cor" name="cor" required>
+
+        <label for="ano">Ano:</label>
+        <input th:field="*{ano}" type="number" id="ano" name="ano" required>
+
+        <label for="km">Quilometragem:</label>
+        <input th:field="*{km}" type="number" id="km" name="km" required>
+
+        <label for="situacao">Situação:</label>
+        <select th:field="*{status}" id="situacao" name="situacao" required>
+            <option value="ativo">Ativo</option>
+            <option value="inativo">Manutenção</option>
+        </select>
+
+        <label for="categoria">Categoria:</label>
+        <select th:field="*{categoria}" id="categoria" name="categoria" required>
+            <option value="A">Categoria A</option>
+            <option value="B">Categoria B</option>
+            <option value="C">Categoria C</option>
+        </select>
+
+        <label for="descricao">Descrição:</label>
+        <textarea th:field="*{descricao}" id="descricao" name="descricao" rows="4" required></textarea>
+
+        <label for="agencia">Agência:</label>
+        <select th:field="*{agenciaId}" id="agencia" name="agencia" required>
+            <option th:each="agencia: ${agencias}" th:value="${agencia.getId()}" th:text="${agencia.getId()}"></option>
+        </select>
+
+        <button type="submit">Cadastrar</button>
+    </form>
+</body>
+</html>

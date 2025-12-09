@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <th:block th:insert="~{fragments/general :: head}"></th:block>
+    <title>Voce Aluga - Consultar Motorista</title>
+</head>
+<body>
+<header th:insert="~{fragments/header :: header}"></header>
+
+<div class="container">
+    <div class="d-flex justify-content-center mb-3">
+        <form th:action="@{/motorista/verificar}" method="GET">
+            <h1>Consultar Motorista</h1>
+            <p class="alert alert-danger mt-2 w-100" th:if="${param.error}">Infelizmente não encontramos o motorista</p>
+
+            <div class="form-group">
+                <label for="cnh">Pesquisar pela CNH</label>
+                <input class="form-control w-100" th:name="cnh"  type="text" id="cnh" name="cnh" placeholder="Digite a CNH do motorista">
+            </div>
+
+            <button class="btn btn-primary mt-3 w-100" type="submit">Consultar</button>
+        </form>
+    </div>
+
+    <table class="table" th:if="${motorista != null}">
+        <thead>
+        <tr>
+            <th scope="col">CNH</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${motorista.getCnh()}"></td>
+            <td th:text="${motorista.getNome()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table" th:if="${motorista == null}">
+        <thead>
+        <tr>
+            <th scope="col">CNH</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="motorista : ${motoristas}">
+            <td th:text="${motorista.getCnh()}"></td>
+            <td th:text="${motorista.getNome()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<th:block th:insert="~{fragments/general :: jquery-plugin}"></th:block>
+<th:block th:insert="~{fragments/general :: js-bootstrap}"></th:block>
+
+</body>
+</html>
