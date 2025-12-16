@@ -14,6 +14,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "funcionario")
 public class Funcionario {
+    
+    @Column(name = "senha") 
+    private String senha;
+
     private String cargo;
     private String nome;
     private String documento;

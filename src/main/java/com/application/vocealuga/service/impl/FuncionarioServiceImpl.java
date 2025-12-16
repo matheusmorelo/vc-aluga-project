@@ -8,6 +8,8 @@ import com.application.vocealuga.repository.FuncionarioRepository;
 import com.application.vocealuga.service.FuncionarioService;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.login.LoginException;
+
 @Service
 public class FuncionarioServiceImpl implements FuncionarioService {
     private FuncionarioRepository funcionarioRepository;
@@ -46,7 +48,7 @@ public class FuncionarioServiceImpl implements FuncionarioService {
             ClienteEntity newCliente = new ClienteEntity();
             newCliente.setNome(funcionarioDto.getNome());
             newCliente.setCpf(funcionarioDto.getDocumento());
-            newCliente.setSenha(password);
+            
             cliente = clienteRepository.save(newCliente);
         }
 
@@ -62,6 +64,34 @@ public class FuncionarioServiceImpl implements FuncionarioService {
         funcionarioResponse.setDocumento(funcionario.getDocumento());
         funcionarioResponse.setCargo(funcionario.getCargo());
         return funcionarioResponse;
+    }
+
+    @Override
+    public Funcionario login(String documento, String senha) throws LoginException {
+        ClienteEntity cliente = null;
+        if (documento.length() == 11) {
+            cliente = clienteRepository.findByCpf(documento);
+        } else if (documento.length() == 14) {
+            cliente = clienteRepository.findByCnpj(documento);
+        }
+
+        if (cliente == null) {
+            throw new LoginException("Documento ou senha inválidos.");
+        }
+
+        // Busca o funcionário associado ao ID do cliente (usando o método novo no Repository)
+        Funcionario funcionario = funcionarioRepository.findByCliente(cliente);
+        
+        if (funcionario == null) {
+            throw new LoginException("Acesso negado: Usuário não é um funcionário.");
+        }
+
+        // Verifica a Senha (Comparação com senha em texto simples "123")
+        if (funcionario.getSenha() != null && funcionario.getSenha().equals(senha)) {
+            return funcionario;
+        } else {
+            throw new LoginException("Documento ou senha inválidos.");
+        }
     }
 
     private static String getGeneratedPassword(String documentField) throws Exception {
